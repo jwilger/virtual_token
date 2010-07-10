@@ -1,4 +1,7 @@
 VirtualToken::Application.routes.draw do |map|
+  resources :tokens
+  root :to => 'tokens#new'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
