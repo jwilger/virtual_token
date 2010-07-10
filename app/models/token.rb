@@ -7,7 +7,10 @@ class Token < ActiveRecord::Base
     where(:slug => id).first || super
   end
 
-  before_create :set_slug
+  before_validation :set_slug, :on => :create
+
+  validates_presence_of :name, :slug
+  validates_uniqueness_of :name
 
   def to_param
     slug

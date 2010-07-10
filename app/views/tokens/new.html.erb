@@ -1,4 +1,7 @@
 <%= form_for @token do |f| %>
+  <% if @token.errors.any? %>
+    <p><%= @token.errors.full_messages.join('</p><p>') -%></p>
+  <% end %>
   <p><%= f.label :name -%>
   <%= f.text_field :name -%>
   <%= submit_tag 'Create Token' -%></p>

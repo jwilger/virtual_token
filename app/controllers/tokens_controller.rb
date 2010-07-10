@@ -6,6 +6,9 @@ class TokensController < ApplicationController
   def create
     token = Token.create!(params[:token])
     redirect_to token_path(token)
+  rescue ActiveRecord::RecordInvalid => e
+    @token = e.record
+    render :action => :new
   end
 
   def show
