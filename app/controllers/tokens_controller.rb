@@ -11,4 +11,10 @@ class TokensController < ApplicationController
   def show
     @token = Token.find(params[:id])
   end
+
+  def update
+    token = Token.find(params[:id])
+    token.update_attributes!(params[:token])
+    redirect_to token_path(token)
+  end
 end
