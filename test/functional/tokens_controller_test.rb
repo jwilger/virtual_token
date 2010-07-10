@@ -23,4 +23,10 @@ class TokensControllerTest < ActionController::TestCase
     assert_template 'tokens/show'
     assert_equal token, assigns[:token]
   end
+
+  test "show should create new token using slug if it doesn't exist" do
+    get :show, :id => 'a-new-token'
+    assert_response :success
+    assert_equal Token.find('a-new-token'), assigns[:token]
+  end
 end

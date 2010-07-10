@@ -10,5 +10,7 @@ class TokensController < ApplicationController
 
   def show
     @token = Token.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    @token = Token.create!(:slug => params[:id])
   end
 end

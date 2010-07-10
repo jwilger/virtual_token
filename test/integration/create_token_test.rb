@@ -17,9 +17,15 @@ class CreateTokenTest < ActionDispatch::IntegrationTest
     user.should_be_on_token_page token.slug
   end
 
+  test "create new token by navigating directly to it" do
+    user = new_session
+    user.goes_to_token_page 'created-on-visit'
+    user.should_be_on_token_page 'created-on-visit'
+  end
+
   private
 
-  module CreateTokenDSL
+  module VirtualTokenSessionDSL
     def goes_to_homepage
       get '/'
       assert_response :success
@@ -50,7 +56,7 @@ class CreateTokenTest < ActionDispatch::IntegrationTest
 
   def new_session
     open_session do |sess|
-      sess.extend CreateTokenDSL
+      sess.extend VirtualTokenSessionDSL
       yield sess if block_given?
     end
   end
