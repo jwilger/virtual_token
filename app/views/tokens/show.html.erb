@@ -4,6 +4,7 @@
   <% if @token.claimant.blank? %>
     <p><%= f.label :claimant, 'Your Name:' -%>
     <%= f.text_field :claimant -%>
+    <%= f.hidden_field :lock_version -%>
     <%= submit_tag 'Claim Token' -%></p>
   <% else %>
     <p>Token has been claimed by <%= @token.claimant -%> for about <%= time_ago_in_words(@token.updated_at) -%>.
