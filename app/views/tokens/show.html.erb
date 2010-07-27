@@ -1,5 +1,11 @@
 <h1><%= @token.name -%></h1>
 
+<% if flash[:error] %>
+  <div style="color:red;border-color:red;border-size:1px;padding:1em;">
+    <%=h flash[:error] %>
+  </div>
+<% end %>
+
 <%= form_for @token do |f| %>
   <% if @token.claimant.blank? %>
     <p><%= f.label :claimant, 'Your Name:' -%>

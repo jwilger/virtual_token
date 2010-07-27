@@ -18,6 +18,9 @@ class TokensController < ApplicationController
   def update
     token = Token.find(params[:id])
     token.update_attributes!(params[:token])
+  rescue ActiveRecord::StaleObjectError
+    flash[:error] = "The token has already been updated by another user."
+  ensure
     redirect_to token_path(token)
   end
 end
