@@ -1,4 +1,4 @@
-class AddClaimantToTokens < ActiveRecord::Migration
+class AddOptimisticLocking < ActiveRecord::Migration
   def self.up
     add_column :tokens, :lock_version, :integer
   end
