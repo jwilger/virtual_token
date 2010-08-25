@@ -13,7 +13,7 @@
     <%= f.hidden_field :lock_version -%>
     <%= submit_tag 'Claim Token' -%></p>
   <% else %>
-    <p>Token has been claimed by <%= @token.claimant -%> for about <%= time_ago_in_words(@token.updated_at) -%>.
+    <p>Token has been claimed by <%= @token.claimant -%> for <%= time_ago_in_words(@token.updated_at) -%>.
     <%= f.hidden_field :claimant, :value => '' -%>
     <%= f.hidden_field :lock_version -%>
     <%= submit_tag 'Release Token' -%></p>
