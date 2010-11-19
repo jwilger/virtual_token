@@ -13,6 +13,7 @@ class TokensController < ApplicationController
 
   def show
     @token = Token.find(params[:id])
+    @new_token_request = TokenRequest.new
   end
 
   def update

@@ -85,6 +85,11 @@ describe TokensController do
       it 'assigns the specified token to the template' do
         assigns(:token).should == @token
       end
+
+      it 'assigns a new token request to the template' do
+        assigns(:new_token_request).should be_kind_of(TokenRequest)
+        assigns(:new_token_request).should be_new_record
+      end
     end
   end
 end
