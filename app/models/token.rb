@@ -16,6 +16,10 @@ class Token < ActiveRecord::Base
     slug
   end
 
+  def claimed?
+    false
+  end
+
   private
 
   def set_slug

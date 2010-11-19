@@ -33,4 +33,13 @@ describe Token do
       t.to_param.should == t.slug
     end
   end
+
+  describe '#claimed?' do
+    context 'there are no requests for the token' do
+      it 'should return false' do
+        t = Token.new
+        t.claimed?.should == false
+      end
+    end
+  end
 end
