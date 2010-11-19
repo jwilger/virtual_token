@@ -1,4 +1,4 @@
-rvm use --create --install ruby-1.8.7-p72@virtualtoken
+rvm use --create --install ree-1.8.7@virtualtoken
 
 if command -v bundle >/dev/null; then
   bundle check
