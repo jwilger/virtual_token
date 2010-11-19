@@ -1,6 +1,8 @@
 require File.expand_path(File.join(File.dirname(__FILE__), '..', 'spec_helper'))
 
 describe TokensController do
+  include Devise::TestHelpers
+
   describe 'routing' do
     it 'routes / to the new action' do
       {:get => '/'}.should route_to(:controller => 'tokens', :action => 'new')
@@ -17,42 +19,72 @@ describe TokensController do
     end
   end
 
-  describe '#new' do
-    it 'renders the new token template' do
-      get :new
-      response.should render_template('tokens/new')
+  context 'anonymous user' do
+    describe '#new' do
+      it 'requires an authenticated user' do
+        get :new
+        response.should redirect_to(new_user_session_path)
+      end
+    end
+
+    describe '#create' do
+      it 'requires an authenticated user' do
+        post :create
+        response.should redirect_to(new_user_session_path)
+      end
+    end
+
+    describe '#show' do
+      it 'requires an authenticated user' do
+        get :create, :id => 'foo'
+        response.should redirect_to(new_user_session_path)
+      end
     end
   end
 
-  describe '#create' do
+  context 'authenticated user' do
     before(:each) do
-      post :create, :token => {:name => 'A New Token'}
-      Token.count.should == 1
-      @token = Token.last
+      s_user = stub('User')
+      request.env['warden'] = stub('Warden', :authenticate => s_user, :authenticate! => s_user)
     end
 
-    it 'creates a new token with the specified name' do
-      @token.name.should == 'A New Token'
+    describe '#new' do
+      it 'renders the new token template' do
+        get :new
+        response.should render_template('tokens/new')
+      end
     end
 
-    it 'redirects to the show action for the new token' do
-      response.should redirect_to(token_path(@token))
-    end
-  end
+    describe '#create' do
+      before(:each) do
+        post :create, :token => {:name => 'A New Token'}
+        Token.count.should == 1
+        @token = Token.last
+      end
 
-  describe '#show' do
-    before(:each) do
-      @token = mock_model('Token')
-      Token.stub!(:find => @token)
-      get :show, :id => 'foo'
+      it 'creates a new token with the specified name' do
+        @token.name.should == 'A New Token'
+      end
+
+      it 'redirects to the show action for the new token' do
+        response.should redirect_to(token_path(@token))
+      end
     end
 
-    it 'renders the token template' do
-      response.should render_template('tokens/show')
-    end
+    describe '#show' do
+      before(:each) do
+        @token = mock_model('Token')
+        Token.stub!(:find => @token)
+        get :show, :id => 'foo'
+      end
 
-    it 'assigns the specified token to the template' do
-      assigns(:token).should == @token
+      it 'renders the token template' do
+        response.should render_template('tokens/show')
+      end
+
+      it 'assigns the specified token to the template' do
+        assigns(:token).should == @token
+      end
     end
   end
 end
