@@ -20,6 +20,10 @@ class Token < ActiveRecord::Base
     false
   end
 
+  def has_queue?
+    false
+  end
+
   private
 
   def set_slug

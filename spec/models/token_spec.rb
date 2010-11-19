@@ -42,4 +42,13 @@ describe Token do
       end
     end
   end
+
+  describe '#has_queue?' do
+    context 'when there are no token requests for this token' do
+      it 'returns false' do
+        t = Token.new
+        t.has_queue?.should == false
+      end
+    end
+  end
 end
