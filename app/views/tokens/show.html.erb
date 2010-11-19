@@ -1,15 +1,27 @@
-<h1><%= @token.name -%></h1>
+<h1><%= @token.name %></h1>
 
-<%= form_for @token do |f| %>
-  <% if @token.claimant.blank? %>
-    <p><%= f.label :claimant, 'Your Name:' -%>
-    <%= f.text_field :claimant -%>
-    <%= f.hidden_field :lock_version -%>
-    <%= submit_tag 'Claim Token' -%></p>
-  <% else %>
-    <p>Token has been claimed by <%= @token.claimant -%> for <%= time_ago_in_words(@token.updated_at) -%>.
-    <%= f.hidden_field :claimant, :value => '' -%>
-    <%= f.hidden_field :lock_version -%>
-    <%= submit_tag 'Release Token' -%></p>
-  <% end %>
+<% if @token.claimed? %>
+  <p><%= @token.claimant %> for <%= time_ago_in_words(@token.claimed_at) %> in
+  order to "<%= @token.claim_purpose %>".</p>
+  <%= button_to 'Release Token', delete_token_request(@token.claimant) %>
+<% end %>
+
+<%= form_for @new_token_request do |f| %>
+  <h2>Request Token</h2>
+  <p><%= f.label :purpose %> <%= f.text_field :purpose %></p>
+  <p><%= f.checkbox :urgent %> <%= f.label :urgent %></p>
+  <%= submit_tag 'Submit Request' %>
+<% end %>
+
+<% if @token.has_queue? %>
+  <h2>Token Queue</h2>
+  <ol>
+    <% @token.queue.each do |token_request| %>
+      <li>
+        <p><%= token_request.user_name %> - "<%= token_request.purpose %>",
+        <%= time_ago_in_words(token_request.created_at) %></p>
+        <p><%= link_to 'Remove', delete_token_request(token_request) %></p>
+      </li>
+    <% end %>
+  </ol>
 <% end %>
