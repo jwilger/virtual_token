@@ -8,4 +8,5 @@ group :development, :test do
   gem 'heroku'
   gem 'taps'
   gem 'unicorn'
+  gem 'rspec-rails'
 end
