@@ -15,6 +15,10 @@
     <p class="alert"><%= flash[:alert] %></p>
   <% end %>
 
+  <% if flash[:error] %>
+    <p class="error"><%= flash[:error] %></p>
+  <% end %>
+
 <%= yield %>
 
 </body>
