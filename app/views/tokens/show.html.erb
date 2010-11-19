@@ -6,7 +6,7 @@
   <%= button_to 'Release Token', delete_token_request(@token.claimant) %>
 <% end %>
 
-<%= form_for @new_token_request do |f| %>
+<%= form_for @new_token_request, :url => token_requests_path(@token) do |f| %>
   <h2>Request Token</h2>
   <p><%= f.label :purpose %> <%= f.text_field :purpose %></p>
   <p><%= f.checkbox :urgent %> <%= f.label :urgent %></p>
