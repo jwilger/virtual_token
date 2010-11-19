@@ -1,4 +1,6 @@
 VirtualToken::Application.routes.draw do |map|
+  devise_for :users
+
   resources :tokens
   root :to => 'tokens#new'
 
