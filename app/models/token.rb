@@ -3,10 +3,6 @@ class Token < ActiveRecord::Base
     name.to_s.downcase.gsub(/\W+/, '-').gsub(/(^-|-$)/, '')
   end
 
-  def self.find(id)
-    where(:slug => id).first || super
-  end
-
   has_many :requests, :class_name => 'TokenRequest'
 
   before_validation :set_slug, :on => :create

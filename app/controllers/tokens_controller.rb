@@ -12,7 +12,7 @@ class TokensController < ApplicationController
   end
 
   def show
-    @token = Token.find(params[:id])
+    @token = Token.find_by_slug!(params[:id])
     @new_token_request = TokenRequest.new
   end
 

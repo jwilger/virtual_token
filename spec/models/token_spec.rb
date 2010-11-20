@@ -8,18 +8,6 @@ describe Token do
     end
   end
 
-  describe '.find' do
-    it 'returns the token with the specified slug' do
-      t = Token.create!(:name => 'Foo Bar')
-      Token.find(t.slug).should == t
-    end
-
-    it 'returns the token with the matching id if no match found for slug' do
-      t = Token.create!(:name => 'Foo Bar')
-      Token.find(t.id).should == t
-    end
-  end
-
   describe '.create' do
     it 'sets the slug based on the token name' do
       t = Token.create!(:name => 'Foo Bar')

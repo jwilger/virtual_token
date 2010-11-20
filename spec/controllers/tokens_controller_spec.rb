@@ -74,19 +74,22 @@ describe TokensController do
     describe '#show' do
       before(:each) do
         @token = mock_model('Token')
-        Token.stub!(:find => @token)
-        get :show, :id => 'foo'
+        Token.stub!(:find_by_slug! => @token)
       end
 
       it 'renders the token template' do
+        get :show, :id => 'foo'
         response.should render_template('tokens/show')
       end
 
       it 'assigns the specified token to the template' do
+        Token.should_receive(:find_by_slug!).with('foo').and_return(@token)
+        get :show, :id => 'foo'
         assigns(:token).should == @token
       end
 
       it 'assigns a new token request to the template' do
+        get :show, :id => 'foo'
         assigns(:new_token_request).should be_kind_of(TokenRequest)
         assigns(:new_token_request).should be_new_record
       end

@@ -9,7 +9,7 @@ class TokenRequestsController < ApplicationController
     TokenRequest.create!(token_params)
     redirect_to token_path(params[:token_id])
   rescue ActiveRecord::RecordInvalid => e
-    @token = Token.find(params[:token_id])
+    @token = token_params[:token]
     @new_token_request = e.record
     render 'tokens/show'
   end

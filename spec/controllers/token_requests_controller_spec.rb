@@ -24,7 +24,7 @@ describe TokenRequestsController do
     end
   end
 
-  context 'with anonymous user' do
+  context '(with anonymous user)' do
     it_should_behave_like 'it has an index at another controller'
 
     describe '#create' do
@@ -35,7 +35,7 @@ describe TokenRequestsController do
     end
   end
 
-  context 'with authenticated user' do
+  context '(with authenticated user)' do
     before(:each) do
       @user = mock_model('User')
       request.env['warden'] = stub('Warden', :authenticate => @user, :authenticate! => @user)
@@ -46,7 +46,7 @@ describe TokenRequestsController do
     describe '#create' do
       context 'with invalid data' do
         before(:each) do
-          Token.stub!(:find)
+          Token.stub!(:find_by_slug!)
           @token_request = mock_model('TokenRequest').as_new_record
           exception = ActiveRecord::RecordInvalid.new(@token_request)
           TokenRequest.stub!(:create!).and_raise(exception)
@@ -58,7 +58,7 @@ describe TokenRequestsController do
         end
 
         it 'assigns the specified token to the template' do
-          Token.should_receive(:find).with('1').and_return(:the_token)
+          Token.should_receive(:find_by_slug!).with('1').and_return(:the_token)
           post :create, :token_id => '1'
           assigns(:token).should == :the_token
         end
@@ -71,6 +71,7 @@ describe TokenRequestsController do
 
       context 'with valid data' do
         it 'should create a new TokenRequest associated with the specified token and current user' do
+          Token.should_receive(:find_by_slug!).with('1').and_return(:the_token)
           TokenRequest.should_receive(:create!) \
             .with("purpose" => 'Foo', "urgent" => '1', "token_id" => '1',
                   "user_id" => @user.id)
@@ -79,6 +80,7 @@ describe TokenRequestsController do
         end
 
         it 'should redirect to the token page' do
+          Token.stub!(:find_by_slug!)
           TokenRequest.stub!(:create!)
           post :create, :token_id => '1'
           response.should redirect_to token_path('1')
