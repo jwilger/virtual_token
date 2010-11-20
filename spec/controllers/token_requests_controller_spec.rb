@@ -17,7 +17,16 @@ describe TokenRequestsController do
     end
   end
 
+  shared_examples_for 'it has an index at another controller' do
+    it 'and redirect to the token page' do
+      get :index, :token_id => '1'
+      response.should redirect_to(token_path('1'))
+    end
+  end
+
   context 'with anonymous user' do
+    it_should_behave_like 'it has an index at another controller'
+
     describe '#create' do
       it 'requires an authenticated user' do
         post :create, :token_id => '1'
@@ -28,9 +37,11 @@ describe TokenRequestsController do
 
   context 'with authenticated user' do
     before(:each) do
-      s_user = stub('User')
-      request.env['warden'] = stub('Warden', :authenticate => s_user, :authenticate! => s_user)
+      @user = mock_model('User')
+      request.env['warden'] = stub('Warden', :authenticate => @user, :authenticate! => @user)
     end
+
+    it_should_behave_like 'it has an index at another controller'
 
     describe '#create' do
       context 'with invalid data' do
@@ -55,6 +66,22 @@ describe TokenRequestsController do
         it 'assigns the invalid token request to the template' do
           post :create, :token_id => '1'
           assigns(:new_token_request).should === @token_request
+        end
+      end
+
+      context 'with valid data' do
+        it 'should create a new TokenRequest associated with the specified token and current user' do
+          TokenRequest.should_receive(:create!) \
+            .with("purpose" => 'Foo', "urgent" => '1', "token_id" => '1',
+                  "user_id" => @user.id)
+          post :create, :token_id => '1',
+            :token_request => {:purpose => 'Foo', :urgent => '1'}
+        end
+
+        it 'should redirect to the token page' do
+          TokenRequest.stub!(:create!)
+          post :create, :token_id => '1'
+          response.should redirect_to token_path('1')
         end
       end
     end

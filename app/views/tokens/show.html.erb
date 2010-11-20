@@ -9,9 +9,19 @@
 <%= form_for @new_token_request, :url => token_requests_path(@token) do |f| %>
   <fieldset>
     <legend>Request Token</legend>
-    <p><%= f.label :purpose %> <%= f.text_field :purpose %>
+    <% if @new_token_request.errors.any? %>
+      <div class="error">
+        <p>The token request could not be saved because:</p>
+        <ul>
+          <% @new_token_request.errors.full_messages.each do |m| %>
+            <li><%= m %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div><%= f.label :purpose %> <%= f.text_field :purpose %>
       <%= f.check_box :urgent %> <%= f.label :urgent %>
-      <%= submit_tag 'Submit Request' %></p>
+      <%= submit_tag 'Submit Request' %></div>
   </fieldset>
 <% end %>
 
