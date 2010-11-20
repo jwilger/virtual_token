@@ -9,7 +9,7 @@ fieldset {
   color: black;
   background-color: white;
   padding: 1.5em 1em 1em 1em;
-  margin: 1em;
+  margin: 0 1em 1em 1em;
   border: 1px solid black;
 }
 
@@ -45,6 +45,10 @@ div.field_with_errors {
   border: 1px solid orange;
   padding: .5em;
   margin: 1em;
+}
+
+#new_token_request {
+  float: right;
 }
 
 #token-queue {
