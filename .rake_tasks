@@ -13,6 +13,15 @@ db:structure:dump
 db:version
 doc:app
 heroku:deploy
+doc:clobber_app
+doc:clobber_plugins
+doc:clobber_rails
+doc:guides
+doc:plugins
+doc:rails
+doc:reapp
+doc:rerails
+heroku:db:pull
 log:clear
 middleware
 notes

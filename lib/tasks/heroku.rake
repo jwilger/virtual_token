@@ -10,4 +10,12 @@ namespace :heroku do
     sh "git push origin production"
     sh "git push origin --tags"
   end
+
+  namespace :db do
+    desc "Load the current production database into local development database"
+    task :pull do
+      rm File.join(Rails.root, 'db', 'development.sqlite3')
+      sh "heroku db:pull --confirm virtual-token"
+    end
+  end
 end
