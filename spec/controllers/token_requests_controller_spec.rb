@@ -73,8 +73,8 @@ describe TokenRequestsController do
         it 'should create a new TokenRequest associated with the specified token and current user' do
           Token.should_receive(:find_by_slug!).with('1').and_return(:the_token)
           TokenRequest.should_receive(:create!) \
-            .with("purpose" => 'Foo', "urgent" => '1', "token_id" => '1',
-                  "user_id" => @user.id)
+            .with("purpose" => 'Foo', "urgent" => '1', "token" => :the_token,
+                  "user" => @user)
           post :create, :token_id => '1',
             :token_request => {:purpose => 'Foo', :urgent => '1'}
         end

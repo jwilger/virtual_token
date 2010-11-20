@@ -17,8 +17,10 @@ class TokenRequestsController < ApplicationController
   private
 
   def token_params
+    return @token_params unless @token_params.nil?
     p = params[:token_request] || {}
-    p.merge!(:token_id => params[:token_id])
-    p.merge!(:user_id => current_user.id)
+    p.merge!(:token => Token.find_by_slug!(params[:token_id]))
+    p.merge!(:user => current_user)
+    @token_params = p
   end
 end
