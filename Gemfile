@@ -4,6 +4,5 @@ gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'devise', '1.1.3'
 
 group :development, :test do
-  gem 'unicorn'
   gem 'rspec-rails'
 end
