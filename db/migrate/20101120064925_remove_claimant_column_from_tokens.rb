@@ -10,7 +10,7 @@ class RemoveClaimantColumnFromTokens < ActiveRecord::Migration
     end
 
     Token.all.each do |token|
-      execute(%Q{INSERT INTO _claimant_backups(token_id, claimant) VALUES(#{token.id}, "#{token.claimant}")})
+      execute(%Q{INSERT INTO _claimant_backups(token_id, claimant) VALUES(#{token.id}, '#{token.claimant}')})
       unless token.claimant.blank?
         TokenRequest.create!(:token => token, :user => user, :purpose => token.claimant)
       end
