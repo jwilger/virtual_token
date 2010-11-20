@@ -4,7 +4,11 @@
   <div id="token-claim-info">
     This token has been claimed by <%= @token.claimed_by %> for <%= time_ago_in_words(@token.claimed_at) %>.
     "<%= @token.claim_purpose %>".
-    <%= button_to 'Release Token', token_request_path(@token, @token.current_request), :method => :delete %>
+    <%= button_to 'Release Token', token_request_path(@token, @token.current_request),
+    :method => :delete,
+    :confirm => (@token.claimed_by == current_user ? nil : \
+                 'You are not the owner of the current claim. ' +
+                 'Are you sure you want to release the token?') %>
   </div>
 <% end %>
 
@@ -29,13 +33,29 @@
 
 <% if @token.has_queue? %>
   <h2>Token Queue</h2>
-  <ol>
-    <% @token.queue.each do |token_request| %>
-      <li>
-        <p><%= token_request.user_name %> - "<%= token_request.purpose %>",
-        <%= time_ago_in_words(token_request.created_at) %></p>
-        <%= button_to 'Delete', token_request_path(@token, token_request), :method => :delete %>
-      </li>
+  <table id="token-queue">
+    <thead>
+      <tr>
+        <th>Requested By</th>
+        <th>Purpose</th>
+        <th>Requested At</th>
+        <th>&nbsp;</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @token.queue.each do |token_request| %>
+        <tr>
+          <td><%= token_request.user_name %></td>
+          <td><%= token_request.purpose %></td>
+          <td><%= time_ago_in_words(token_request.created_at) %> ago</td>
+          <td>
+            <%= button_to 'Delete', token_request_path(@token, token_request),
+              :method => :delete,
+              :confirm => (token_request.user == current_user ? nil : \
+                           'You are not the owner of this request. ' +
+                           'Are you sure you want to delete it?') %>
+          </td>
+        </tr>
     <% end %>
-  </ol>
+  </table>
 <% end %>
