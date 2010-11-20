@@ -12,5 +12,14 @@ describe TokenRequest do
       Timecop.return
       request.claim_granted_at.should == time
     end
+
+    it 'does not update the #claim_granted_at attribute is is is already set' do
+      time = 3.hours.ago
+      user = mock_model('User').as_null_object
+      token = mock_model('Token').as_null_object
+      request = TokenRequest.new(:user => user, :token => token, :claim_granted_at => time)
+      request.claim_granted
+      request.claim_granted_at.should == time
+    end
   end
 end
