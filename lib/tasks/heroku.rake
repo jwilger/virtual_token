@@ -1,10 +1,8 @@
 namespace :heroku do
   desc 'Deploy the production branch to heroku'
   task :deploy => :tag_release do
-    sh 'heroku maintenance:on'
     sh 'git push heroku production:master'
     sh 'heroku rake db:migrate'
-    sh 'heroku maintenance:off'
   end
 
   task :tag_release do
