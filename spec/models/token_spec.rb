@@ -98,11 +98,32 @@ describe Token do
     end
   end
 
+  describe '#queue' do
+    it 'returns requests that have not been granted the claim' do
+      t = Token.new
+      requests_proxy = mock('Token#requests')
+      requests_proxy.should_receive(:where) \
+        .with(:claim_granted_at => nil) \
+        .and_return([:req_a, :req_b])
+      t.stub!(:requests => requests_proxy)
+      t.queue.should == [:req_a, :req_b]
+    end
+  end
+
   describe '#has_queue?' do
-    context 'when there are no token requests for this token' do
+    context 'when there is no queue for this token' do
       it 'returns false' do
         t = Token.new
+        t.stub!(:queue => [])
         t.has_queue?.should == false
+      end
+    end
+
+    context 'when there is a queue for this token' do
+      it 'returns true' do
+        t = Token.new
+        t.stub!(:queue => [mock_model('TokenRequest')])
+        t.has_queue?.should == true
       end
     end
   end

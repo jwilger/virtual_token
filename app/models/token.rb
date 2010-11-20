@@ -35,8 +35,12 @@ class Token < ActiveRecord::Base
     current_request ? current_request.purpose : nil
   end
 
+  def queue
+    requests.where(:claim_granted_at => nil)
+  end
+
   def has_queue?
-    false
+    queue.any?
   end
 
   def update_queue
