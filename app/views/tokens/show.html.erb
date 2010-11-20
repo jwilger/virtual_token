@@ -4,7 +4,7 @@
   <div id="token-claim-info">
     This token has been claimed by <%= @token.claimed_by %> for <%= time_ago_in_words(@token.claimed_at) %>.
     "<%= @token.claim_purpose %>".
-    <%= button_to 'Release Token', token_request_path(@token.current_request), :method => :delete %>
+    <%= button_to 'Release Token', token_request_path(@token, @token.current_request), :method => :delete %>
   </div>
 <% end %>
 
@@ -34,7 +34,7 @@
       <li>
         <p><%= token_request.user_name %> - "<%= token_request.purpose %>",
         <%= time_ago_in_words(token_request.created_at) %></p>
-        <p><%= link_to 'Remove', delete_token_request(token_request) %></p>
+        <%= button_to 'Delete', token_request_path(@token, token_request), :method => :delete %>
       </li>
     <% end %>
   </ol>
