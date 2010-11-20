@@ -34,10 +34,27 @@ describe TokenRequestsController do
 
     describe '#create' do
       context 'with invalid data' do
+        before(:each) do
+          Token.stub!(:find)
+          @token_request = mock_model('TokenRequest').as_new_record
+          exception = ActiveRecord::RecordInvalid.new(@token_request)
+          TokenRequest.stub!(:create!).and_raise(exception)
+        end
+
         it 'renders the tokens/show template' do
-          TokenRequest.stub!(:create!).and_raise(ActiveRecord::RecordInvalid)
           post :create, :token_id => '1'
           response.should render_template('tokens/show')
+        end
+
+        it 'assigns the specified token to the template' do
+          Token.should_receive(:find).with('1').and_return(:the_token)
+          post :create, :token_id => '1'
+          assigns(:token).should == :the_token
+        end
+
+        it 'assigns the invalid token request to the template' do
+          post :create, :token_id => '1'
+          assigns(:new_token_request).should === @token_request
         end
       end
     end
