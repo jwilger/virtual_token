@@ -1,4 +1,4 @@
-class TokenRequest < ActiveRecord::Migration
+class AddTokenRequest < ActiveRecord::Migration
   def self.up
     create_table :token_requests do |t|
       t.integer :user_id, :null => false
