@@ -3,7 +3,8 @@ class Token < ActiveRecord::Base
     name.to_s.downcase.gsub(/\W+/, '-').gsub(/(^-|-$)/, '')
   end
 
-  has_many :requests, :class_name => 'TokenRequest'
+  has_many :requests, :class_name => 'TokenRequest', :inverse_of => :token,
+    :dependent => :destroy, :order => 'created_at ASC'
 
   before_validation :set_slug, :on => :create
 
@@ -20,6 +21,11 @@ class Token < ActiveRecord::Base
 
   def has_queue?
     false
+  end
+
+  def update_queue
+    next_request = requests(true).first
+    update_attribute(:claimed_at, next_request ? Time.now : nil)
   end
 
   private

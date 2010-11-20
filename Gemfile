@@ -8,3 +8,7 @@ group :development, :test do
   gem 'heroku'
   gem 'taps'
 end
+
+group :test do
+  gem 'timecop'
+end

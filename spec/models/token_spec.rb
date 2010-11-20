@@ -33,7 +33,7 @@ describe Token do
     context 'there are one or more requests for the token' do
       it 'should return true' do
         t = Token.new
-        t.requests << mock_model('TokenRequest')
+        t.requests << mock_model('TokenRequest', :set_token_target => nil)
         t.claimed?.should == true
       end
     end
@@ -44,6 +44,34 @@ describe Token do
       it 'returns false' do
         t = Token.new
         t.has_queue?.should == false
+      end
+    end
+  end
+
+  describe '#update_queue' do
+    it 'reloads the requests association' do
+      token = Token.new
+      token.should_receive(:requests).with(true).and_return([])
+      token.update_queue
+    end
+
+    context '(when there are no requests)' do
+      it 'sets claimed_at to nil' do
+        token = Token.new(:claimed_at => Time.now)
+        token.update_queue
+        token.claimed_at.should be_nil
+      end
+    end
+
+    context '(when there is at least one request)' do
+      it 'sets claimed_at to the current time' do
+        token = Token.new
+        token.stub!(:requests => [mock_model('TokenRequest')])
+        Timecop.freeze
+        token.update_queue
+        time = Time.now
+        Timecop.return
+        token.claimed_at.should == time
       end
     end
   end
