@@ -39,6 +39,43 @@ describe Token do
     end
   end
 
+  describe '#claimed_by' do
+    it 'returns nil when there are no token requests' do
+      token = Token.new
+      token.claimed_by.should be_nil
+    end
+
+    it 'returns the name of the user associated with the first request' do
+      token = Token.new
+      token.requests << mock_model('TokenRequest', :user_name => 'Andy', :set_token_target => nil)
+      token.requests << mock_model('TokenRequest', :user_name => 'Bob', :set_token_target => nil)
+      token.claimed_by.should == 'Andy'
+    end
+  end
+
+  describe '#claim_purpose' do
+    it 'returns nil when there are no token requests' do
+      token = Token.new
+      token.claim_purpose.should be_nil
+    end
+
+    it 'returns the purpose associated with the first request' do
+      token = Token.new
+      token.requests << mock_model('TokenRequest', :purpose => 'Foo', :set_token_target => nil)
+      token.requests << mock_model('TokenRequest', :purpose => 'Bar', :set_token_target => nil)
+      token.claim_purpose.should == 'Foo'
+    end
+  end
+
+  describe '#current_request' do
+    it 'returns #requests.first' do
+      token = Token.new
+      token.requests << request_a = mock_model('TokenRequest', :set_token_target => nil)
+      token.requests << mock_model('TokenRequest',:set_token_target => nil)
+      token.current_request.should === request_a
+    end
+  end
+
   describe '#has_queue?' do
     context 'when there are no token requests for this token' do
       it 'returns false' do
@@ -64,6 +101,8 @@ describe Token do
     end
 
     context '(when there is at least one request)' do
+      it 'does not change claimed_at when the current_request has not changed'
+
       it 'sets claimed_at to the current time' do
         token = Token.new
         token.stub!(:requests => [mock_model('TokenRequest')])

@@ -1,9 +1,9 @@
 <h1><%= @token.name %></h1>
 
 <% if @token.claimed? %>
-  <p><%= @token.claimant %> for <%= time_ago_in_words(@token.claimed_at) %> in
-  order to "<%= @token.claim_purpose %>".</p>
-  <%= button_to 'Release Token', delete_token_request(@token.claimant) %>
+  <p>This token has been claimed by <%= @token.claimed_by %> for <%= time_ago_in_words(@token.claimed_at) %>.
+     "<%= @token.claim_purpose %>".</p>
+  <%= button_to 'Release Token', token_request_path(@token.current_request), :method => :delete %>
 <% end %>
 
 <%= form_for @new_token_request, :url => token_requests_path(@token) do |f| %>

@@ -19,6 +19,18 @@ class Token < ActiveRecord::Base
     requests.any?
   end
 
+  def current_request
+    requests.first
+  end
+
+  def claimed_by
+    current_request ? current_request.user_name : nil
+  end
+
+  def claim_purpose
+    current_request ? current_request.purpose : nil
+  end
+
   def has_queue?
     false
   end
