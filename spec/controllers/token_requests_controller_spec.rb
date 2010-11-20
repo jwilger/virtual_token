@@ -33,6 +33,13 @@ describe TokenRequestsController do
         response.should redirect_to(new_user_session_path)
       end
     end
+
+    describe '#destroy' do
+      it 'requires an authenticated user' do
+        delete :destroy, :token_id => '1', :id => '2'
+        response.should redirect_to(new_user_session_path)
+      end
+    end
   end
 
   context '(with authenticated user)' do
@@ -85,6 +92,19 @@ describe TokenRequestsController do
           post :create, :token_id => '1'
           response.should redirect_to token_path('1')
         end
+      end
+    end
+
+    describe '#destroy' do
+      it 'destroys the specified TokenRequest' do
+        TokenRequest.should_receive(:destroy).with('1')
+        delete :destroy, :token_id => 'foo', :id => '1'
+      end
+
+      it 'redirects to the token page' do
+        TokenRequest.stub!(:destroy)
+        delete :destroy, :token_id => 'foo', :id => '1'
+        response.should redirect_to(token_path('foo'))
       end
     end
   end

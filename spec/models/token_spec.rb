@@ -62,11 +62,11 @@ describe Token do
       token.claimed_by.should be_nil
     end
 
-    it 'returns the name of the user associated with the first request' do
+    it 'returns the user associated with the current_request' do
       token = Token.new
-      token.requests << mock_model('TokenRequest', :user_name => 'Andy', :set_token_target => nil)
-      token.requests << mock_model('TokenRequest', :user_name => 'Bob', :set_token_target => nil)
-      token.claimed_by.should == 'Andy'
+      request = mock_model('TokenRequest', :user => :bilbo)
+      token.stub!(:current_request => request)
+      token.claimed_by.should == :bilbo
     end
   end
 

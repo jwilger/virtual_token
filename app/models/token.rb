@@ -24,7 +24,7 @@ class Token < ActiveRecord::Base
   end
 
   def claimed_by
-    current_request ? current_request.user_name : nil
+    current_request ? current_request.user : nil
   end
 
   def claimed_at

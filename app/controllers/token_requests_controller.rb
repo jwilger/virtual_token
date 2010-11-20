@@ -14,6 +14,11 @@ class TokenRequestsController < ApplicationController
     render 'tokens/show'
   end
 
+  def destroy
+    TokenRequest.destroy(params[:id])
+    redirect_to token_path(params[:token_id])
+  end
+
   private
 
   def token_params
