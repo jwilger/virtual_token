@@ -19,12 +19,16 @@ class Token < ActiveRecord::Base
     requests.any?
   end
 
-  def current_request
-    requests.first
+  def current_request(reload = false)
+    requests(reload).first
   end
 
   def claimed_by
     current_request ? current_request.user_name : nil
+  end
+
+  def claimed_at
+    current_request ? current_request.claim_granted_at : nil
   end
 
   def claim_purpose
@@ -36,8 +40,9 @@ class Token < ActiveRecord::Base
   end
 
   def update_queue
-    next_request = requests(true).first
-    update_attribute(:claimed_at, next_request ? Time.now : nil)
+    if _current_request = current_request(true)
+      _current_request.claim_granted
+    end
   end
 
   private

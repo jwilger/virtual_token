@@ -39,6 +39,23 @@ describe Token do
     end
   end
 
+  describe '#claimed_at' do
+    it 'returns nill when there are no token requests' do
+      token = Token.new
+      token.claimed_at.should be_nil
+    end
+
+    it 'returns TokenRequest#claim_granted_at from the current_request' do
+      token = Token.new
+      Timecop.travel(3.hours.ago)
+      claim_time = Time.now
+      token.requests << mock_model('TokenRequest', :claim_granted_at => claim_time, :set_token_target => nil)
+      Timecop.return
+      token.requests << mock_model('TokenRequest', :set_token_target => nil)
+      token.claimed_at.should == claim_time
+    end
+  end
+
   describe '#claimed_by' do
     it 'returns nil when there are no token requests' do
       token = Token.new
@@ -70,9 +87,14 @@ describe Token do
   describe '#current_request' do
     it 'returns #requests.first' do
       token = Token.new
-      token.requests << request_a = mock_model('TokenRequest', :set_token_target => nil)
-      token.requests << mock_model('TokenRequest',:set_token_target => nil)
-      token.current_request.should === request_a
+      token.should_receive(:requests).with(false).and_return([:request_a, :request_b])
+      token.current_request.should === :request_a
+    end
+
+    it 'reloads the requests association when `true` is passed' do
+      token = Token.new
+      token.should_receive(:requests).with(true).and_return([])
+      token.current_request(true)
     end
   end
 
@@ -92,26 +114,12 @@ describe Token do
       token.update_queue
     end
 
-    context '(when there are no requests)' do
-      it 'sets claimed_at to nil' do
-        token = Token.new(:claimed_at => Time.now)
-        token.update_queue
-        token.claimed_at.should be_nil
-      end
-    end
-
-    context '(when there is at least one request)' do
-      it 'does not change claimed_at when the current_request has not changed'
-
-      it 'sets claimed_at to the current time' do
-        token = Token.new
-        token.stub!(:requests => [mock_model('TokenRequest')])
-        Timecop.freeze
-        token.update_queue
-        time = Time.now
-        Timecop.return
-        token.claimed_at.should == time
-      end
+    it 'notifies the #current_request that it has claimed the token' do
+      token = Token.new
+      request = mock_model('TokenRequest', :set_token_target => nil)
+      request.should_receive(:claim_granted)
+      token.stub!(:current_request => request)
+      token.update_queue
     end
   end
 end
