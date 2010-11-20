@@ -2,8 +2,8 @@
 
 <% if @token.claimed? %>
   <div id="token-claim-info">
-    This token has been claimed by <%= @token.claimed_by %> for <%= time_ago_in_words(@token.claimed_at) %>.
-    "<%= @token.claim_purpose %>".
+    <p>This token has been claimed by <%= @token.claimed_by %> for <%= time_ago_in_words(@token.claimed_at) %>.
+    "<%= @token.claim_purpose %>".</p>
     <%= button_to 'Release Token', token_request_path(@token, @token.current_request),
     :method => :delete,
     :confirm => (@token.claimed_by == current_user ? nil : \
@@ -11,6 +11,8 @@
                  'Are you sure you want to release the token?') %>
   </div>
 <% end %>
+
+<h2>Token Queue</h2>
 
 <%= form_for @new_token_request, :url => token_requests_path(@token) do |f| %>
   <fieldset>
@@ -32,13 +34,12 @@
 <% end %>
 
 <% if @token.has_queue? %>
-  <h2>Token Queue</h2>
   <table id="token-queue">
     <thead>
       <tr>
         <th>Requested By</th>
         <th>Purpose</th>
-        <th>Requested At</th>
+        <th>Requested</th>
         <th>&nbsp;</th>
       </tr>
     </thead>
