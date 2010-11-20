@@ -2,8 +2,10 @@
 
 <% if @token.claimed? %>
   <div id="token-claim-info">
-    <p>This token has been claimed by <%= @token.claimed_by %> for <%= time_ago_in_words(@token.claimed_at) %>.
-    "<%= @token.claim_purpose %>".</p>
+    <p>This token has been claimed by <%= @token.claimed_by %> for <%= time_ago_in_words(@token.claimed_at) %>.</p>
+    <blockquote>
+      <%= @token.claim_purpose %>
+    </blockquote>
     <%= button_to 'Release Token', token_request_path(@token, @token.current_request),
     :method => :delete,
     :confirm => (@token.claimed_by == current_user ? nil : \
@@ -37,9 +39,9 @@
   <table id="token-queue">
     <thead>
       <tr>
-        <th>Requested By</th>
-        <th>Purpose</th>
-        <th>Requested</th>
+        <th>Who</th>
+        <th>Why</th>
+        <th>When</th>
         <th>&nbsp;</th>
       </tr>
     </thead>
