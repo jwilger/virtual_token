@@ -41,6 +41,14 @@ describe Token do
         t.claimed?.should == false
       end
     end
+
+    context 'there are one or more requests for the token' do
+      it 'should return true' do
+        t = Token.new
+        t.requests << mock_model('TokenRequest')
+        t.claimed?.should == true
+      end
+    end
   end
 
   describe '#has_queue?' do

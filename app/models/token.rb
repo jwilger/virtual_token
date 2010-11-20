@@ -7,6 +7,8 @@ class Token < ActiveRecord::Base
     where(:slug => id).first || super
   end
 
+  has_many :requests, :class_name => 'TokenRequest'
+
   before_validation :set_slug, :on => :create
 
   validates_presence_of :name, :slug
@@ -17,7 +19,7 @@ class Token < ActiveRecord::Base
   end
 
   def claimed?
-    false
+    requests.any?
   end
 
   def has_queue?
