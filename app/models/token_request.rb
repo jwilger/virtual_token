@@ -7,4 +7,8 @@ class TokenRequest < ActiveRecord::Base
   validates_presence_of :purpose
 
   delegate :name, :to => :user, :prefix => true
+
+  def claim_granted
+    update_attribute(:claim_granted_at, Time.now)
+  end
 end

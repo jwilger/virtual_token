@@ -1,5 +1,6 @@
 class RemoveClaimantColumnFromTokens < ActiveRecord::Migration
   def self.up
+    add_column :token_requests, :claim_granted_at, :datetime
     user = User.create!(:name => 'System', :email => 'no-reply@example.com', :password => 'st&&w4lk', :password_confirmation => 'st&&w4lk')
     user.lock_access!
 
@@ -35,5 +36,6 @@ class RemoveClaimantColumnFromTokens < ActiveRecord::Migration
     end
 
     drop_table :_claimant_backups
+    remove_column :token_requests, :claim_granted_at
   end
 end
