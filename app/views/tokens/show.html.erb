@@ -1,15 +1,64 @@
-<h1><%= @token.name -%></h1>
+<h1><%= @token.name %></h1>
 
-<%= form_for @token do |f| %>
-  <% if @token.claimant.blank? %>
-    <p><%= f.label :claimant, 'Your Name:' -%>
-    <%= f.text_field :claimant -%>
-    <%= f.hidden_field :lock_version -%>
-    <%= submit_tag 'Claim Token' -%></p>
-  <% else %>
-    <p>Token has been claimed by <%= @token.claimant -%> for <%= time_ago_in_words(@token.updated_at) -%>.
-    <%= f.hidden_field :claimant, :value => '' -%>
-    <%= f.hidden_field :lock_version -%>
-    <%= submit_tag 'Release Token' -%></p>
-  <% end %>
+<% if @token.claimed? %>
+  <div id="token-claim-info">
+    <p>This token has been claimed by <%= @token.claimed_by %> for <%= time_ago_in_words(@token.claimed_at) %>.</p>
+    <blockquote>
+      <%= @token.claim_purpose %>
+    </blockquote>
+    <%= button_to 'Release Token', token_request_path(@token, @token.current_request),
+    :method => :delete,
+    :confirm => (@token.claimed_by == current_user ? nil : \
+                 'You are not the owner of the current claim. ' +
+                 'Are you sure you want to release the token?') %>
+  </div>
+<% end %>
+
+<h2>Token Queue</h2>
+
+<%= form_for @new_token_request, :url => token_requests_path(@token) do |f| %>
+  <fieldset>
+    <legend>Request Token</legend>
+    <% if @new_token_request.errors.any? %>
+      <div class="error">
+        <p>The token request could not be saved because:</p>
+        <ul>
+          <% @new_token_request.errors.full_messages.each do |m| %>
+            <li><%= m %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div><%= f.label :purpose %> <%= f.text_field :purpose %>
+      <%= f.check_box :urgent %> <%= f.label :urgent %>
+      <%= submit_tag 'Submit Request' %></div>
+  </fieldset>
+<% end %>
+
+<% if @token.has_queue? %>
+  <table id="token-queue">
+    <thead>
+      <tr>
+        <th>Who</th>
+        <th>Why</th>
+        <th>When</th>
+        <th>&nbsp;</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @token.queue.each do |token_request| %>
+        <tr>
+          <td><%= token_request.user_name %></td>
+          <td><%= token_request.purpose %></td>
+          <td><%= time_ago_in_words(token_request.created_at) %> ago</td>
+          <td>
+            <%= button_to 'Delete', token_request_path(@token, token_request),
+              :method => :delete,
+              :confirm => (token_request.user == current_user ? nil : \
+                           'You are not the owner of this request. ' +
+                           'Are you sure you want to delete it?') %>
+          </td>
+        </tr>
+    <% end %>
+  </table>
 <% end %>

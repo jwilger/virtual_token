@@ -1,0 +1,79 @@
+html, body {
+  color: black;
+  background-color: lightblue;
+  font-size: 12pt;
+  font-family: Verdana, Helvetica, sans-serif;
+}
+
+fieldset {
+  color: black;
+  background-color: white;
+  padding: 1.5em 1em 1em 1em;
+  margin: 0 1em 1em 1em;
+  border: 1px solid black;
+}
+
+legend {
+  font-size: 1.2em;
+  color: black;
+  background-color: white;
+  border: 1px solid black;
+}
+
+form.button_to, form.button_to>div {
+  display: inline;
+}
+
+div.error {
+  color: darkred;
+  background-color: pink;
+  border: 1px solid red;
+  margin: 1em;
+  padding: 1em;
+}
+
+div.field_with_errors {
+  display: inline;
+  color: darkred;
+  font-style: italic;
+}
+
+#token-claim-info {
+  font-size: 1.2em;
+  color: black;
+  background-color: lightyellow;
+  border: 1px solid orange;
+  padding: .5em;
+  margin: 1em;
+}
+
+#new_token_request {
+  float: right;
+}
+
+#token-queue {
+  margin: 1em;
+  border-spacing: 0;
+  color: black;
+  background-color: white;
+  border: 1px solid darkblue;
+}
+
+#token-queue tbody tr:nth-child(odd) {
+  color: black;
+  background-color: rgba(255,255,255,0.06);
+}
+
+#token-queue tbody tr:nth-child(even) {
+  color: black;
+  background-color: rgba(0,0,0,0.1);
+}
+
+#token-queue thead {
+  background-color: rgba(0,0,100,0.1);
+  color: darkblue;
+}
+
+#token-queue td, #token-queue th {
+  padding: 0.5em 2em;
+}
