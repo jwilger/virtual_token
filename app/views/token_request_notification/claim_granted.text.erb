@@ -1,0 +1,12 @@
+Hello <%= @user.name %>,
+
+It's your turn with the <%= @token.name %> token.
+<<%= token_url(@token) %>>
+
+You reserved this token in order to:
+
+<%= @token_request.purpose %>
+
+If you no longer need the token, or if you will be unable to act on the token
+for a long time, please be sure to visit the token page and release it for the
+next person in line.
