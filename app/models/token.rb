@@ -4,7 +4,7 @@ class Token < ActiveRecord::Base
   end
 
   has_many :requests, :class_name => 'TokenRequest', :inverse_of => :token,
-    :dependent => :destroy, :order => 'created_at ASC'
+    :dependent => :destroy, :order => 'position ASC'
 
   before_validation :set_slug, :on => :create
 
