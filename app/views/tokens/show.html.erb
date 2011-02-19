@@ -30,7 +30,6 @@
       </div>
     <% end %>
     <div><%= f.label :purpose %> <%= f.text_field :purpose %>
-      <!-- <%= f.check_box :urgent %> <%= f.label :urgent %> -->
       <%= submit_tag 'Submit Request' %></div>
   </fieldset>
 <% end %>
@@ -52,13 +51,25 @@
           <td><%= token_request.purpose %></td>
           <td><%= time_ago_in_words(token_request.created_at) %> ago</td>
           <td>
-            <%= button_to 'Delete', token_request_path(@token, token_request),
-              :method => :delete,
-              :confirm => (token_request.user == current_user ? nil : \
-                           'You are not the owner of this request. ' +
-                           'Are you sure you want to delete it?') %>
-          </td>
-        </tr>
+            <ul>
+              <% ['top', 'up', 'down', 'bottom'].each do |where| %>
+                <li>
+                <%= link_to where, move_token_request_path(@token, token_request, :where => where), :method => :put %>
+                </li>
+              <% end %>
+              <li>
+                <%= link_to 'claim', move_token_request_path(@token, token_request, :where => 'claim'), :method => :put, :confirm => 'Are you sure you want to be a jerk and steal the claim on the token?' %>
+              </li>
+              <li>
+                <%= link_to 'delete', token_request_path(@token, token_request),
+                  :method => :delete,
+                  :confirm => (token_request.user == current_user ? nil : \
+                               'You are not the owner of this request. ' +
+                               'Are you sure you want to delete it?') %>
+             </li>
+           </ul>
+         </td>
+       </tr>
     <% end %>
   </table>
 <% end %>

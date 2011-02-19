@@ -45,7 +45,7 @@ class Token < ActiveRecord::Base
 
   def update_queue
     if _current_request = current_request(true)
-      _current_request.claim_granted
+      _current_request.grant_claim
     end
   end
 
