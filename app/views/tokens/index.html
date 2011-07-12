@@ -1,0 +1,14 @@
+<%= link_to "Create a new token", new_token_path %>
+<h1>Existing tokens:</h1>
+<ul>
+  <% @tokens.each do |token| %>
+  <li><h3><%= link_to token.name, token %></h3>
+      Last used: <%= token.updated_at %>
+      <% if token.claimed? %>      
+      <br />Currently held by <%= token.claimed_by.name %> for <%= token.claim_purpose %>
+      <% else %>
+      <br /><%= link_to("Delete", token, :method => :delete, :confirm => "Are you sure? Clicking Delete will delete your token!") %>
+      <% end %>
+  </li>
+  <% end %>
+</ul>

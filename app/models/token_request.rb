@@ -10,6 +10,12 @@ class TokenRequest < ActiveRecord::Base
 
   delegate :name, :to => :user, :prefix => true
 
+  after_create :update_token
+
+  def update_token
+    token.touch
+  end
+
   def grant_claim
     unless claim_granted?
       update_attribute(:claim_granted_at, Time.now)
