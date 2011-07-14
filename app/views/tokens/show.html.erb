@@ -34,6 +34,15 @@
   </fieldset>
 <% end %>
 
+<div id="other-tokens">
+  <h3><%= link_to "Other Recently Used Tokens", tokens_path %></h3>
+<ul>
+  <% @other_tokens.each do |token| %>
+    <li><%= link_to token.name, token %></li> 
+  <% end %>
+</ul>
+</div>
+
 <% if @token.has_queue? %>
   <table id="token-queue">
     <thead>

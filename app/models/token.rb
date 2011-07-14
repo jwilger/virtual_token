@@ -11,6 +11,10 @@ class Token < ActiveRecord::Base
   validates_presence_of :name, :slug
   validates_uniqueness_of :name
 
+  def self.other_tokens(t)
+    Token.order('updated_at desc').where( 'tokens.id != ?', t).limit(10)
+  end
+
   def to_param
     slug
   end

@@ -51,6 +51,10 @@ div.field_with_errors {
   float: right;
 }
 
+#other-tokens {
+  float: right; clear: right; width: 400px; background-color: white; margin: 0 1em 1em; padding: 1.5em 1em 1em; border: 1px solid black;
+}
+
 #token-queue {
   margin: 1em;
   border-spacing: 0;
