@@ -1,0 +1,2 @@
+after_install:
+  - "bundle exec rake db:migrate"
